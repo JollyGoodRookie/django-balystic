@@ -42,7 +42,9 @@ setup(
         'balystic',
     ],
     include_package_data=True,
-    install_requires=[],
+    install_requires=[
+        requests==2.10.0,
+    ],
     license="MIT",
     zip_safe=False,
     keywords='django-balystic',
