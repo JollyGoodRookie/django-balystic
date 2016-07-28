@@ -2,6 +2,7 @@
 Django Balystic
 =============================
 
+
 .. image:: https://badge.fury.io/py/django-balystic.png
     :target: https://badge.fury.io/py/django-balystic
 
@@ -22,6 +23,7 @@ Install Django Balystic::
 Then use it in a project::
 
     import balystic
+
 
 Features
 --------
