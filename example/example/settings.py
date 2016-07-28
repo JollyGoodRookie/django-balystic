@@ -118,3 +118,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+BALYSTIC_API_TOKEN = 'mysecrettoken'
+BALYSTIC_API_PATH = 'mycommunity.7dhub.com/api/'

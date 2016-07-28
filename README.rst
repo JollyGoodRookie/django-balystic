@@ -28,7 +28,21 @@ Then use it in a project::
 Features
 --------
 
-* TODO
+This client makes it easy to use the balystic API.
+Just add a couple settings::
+
+    BALYSTIC_API_TOKEN = 'mysecrettoken'
+    BALYSTIC_API-PATH = 'mycommunity.7dhub.com/api/'
+
+Then create a client instance::
+
+    from balystic.client import Client
+    client = Client()
+
+And use the client to perform the requests::
+
+    user_list = client.get_users()
+    user_detail = client.get_user_detail()
 
 Running Tests
 --------------
