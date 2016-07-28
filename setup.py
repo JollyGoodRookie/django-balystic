@@ -8,7 +8,7 @@ try:
 except ImportError:
     from distutils.core import setup
 
-version = '0.1.1'
+version = '0.1.2'
 
 if sys.argv[-1] == 'publish':
     try:
@@ -43,7 +43,7 @@ setup(
     ],
     include_package_data=True,
     install_requires=[
-        requests==2.10.0,
+        'requests==2.10.0',
     ],
     license="MIT",
     zip_safe=False,
