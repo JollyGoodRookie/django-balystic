@@ -1,4 +1,5 @@
 import requests
+from django.conf import settings
 
 def _url(path):
     return ''
@@ -10,14 +11,14 @@ class Client(object):
     """
     USER_ENDPOINT = 'users/'
 
-    def __init__(self, token, root):
+    def __init__(self):
         """
         Token should be provided by the admin of the community.
         Root must be the full path to the api root
         i.e. http://sample.7dhub.com/api/
         """
-        self.headers = {'Authorization': 'TOKEN ' + token}
-        self.root = root
+        self.headers = {'Authorization': 'TOKEN '+settings.BALYSTIC_API_TOKEN}
+        self.root = settings.BALYSTIC_API_PATH
 
     def _make_request(self, path, method):
         """
