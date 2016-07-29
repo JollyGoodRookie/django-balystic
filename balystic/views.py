@@ -4,6 +4,18 @@ from django.views.generic import View
 from .client import Client
 
 
+class CommunityUserList(View):
+    """
+    Displays a list of the users retrieved from 7dhub
+    """
+    template_name = 'balystic/user_list.html'
+    client = Client()
+
+    def get(self, request):
+        context = {'users': self.client.get_users()}
+        return render(request, self.template_name, context)
+
+
 class CommunityBlogListView(View):
     template_name = "balystic/blog_list.html"
 

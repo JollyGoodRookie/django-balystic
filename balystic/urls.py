@@ -6,6 +6,8 @@ from . import views
 
 urlpatterns = [
     # url(r'', TemplateView.as_view(template_name="balystic/base.html")),
+    url(r'^users/$', views.CommunityUserList.as_view(),
+        name='balystic_user_list'),
     url(r'^blog/$',
         views.CommunityBlogListView.as_view(), name='balystic_blog'),
     url(r'^blog/(?P<slug>[-\w.]+)/$',
