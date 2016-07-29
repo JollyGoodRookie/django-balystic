@@ -13,6 +13,7 @@ class Client(object):
     """
     USER_ENDPOINT = 'users/'
     BLOG_ENDPOINT = 'blog/'
+    QA_ENDPOINT = 'qa/'
 
     def __init__(self):
         """
@@ -57,12 +58,19 @@ class Client(object):
         return self._make_request(
             self.USER_ENDPOINT + username + '/', 'GET')
 
-    def delete_user(self):
+    def delete_user(self, username):
         """
         Removes an user from the community.
         """
         return self._make_request(
             self.USER_ENDPOINT + username + '/', 'DELETE')
+
+    def add_user(self):
+        """
+        Adds an user to the community.
+        """
+        return self._make_request(
+            self.USER_ENDPOINT + username + '/', 'POST')
 
     def get_blogs(self, page=1):
         """
@@ -77,3 +85,18 @@ class Client(object):
         """
         return self._make_request(
             self.BLOG_ENDPOINT + slug + '/', 'GET')
+
+    def get_questions(self, page=1):
+        """
+        retrieves the list of questions on a
+        community
+        """
+        return self._make_request(
+            self.QA_ENDPOINT + '?page=' + str(page), 'GET')
+
+    def get_question_detail(self, pk):
+        """
+        Retrieves a blog post detail
+        """
+        return self._make_request(
+            self.QA_ENDPOINT + pk + '/', 'GET')
