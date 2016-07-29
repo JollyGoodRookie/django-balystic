@@ -57,6 +57,20 @@ class Client(object):
         return self._make_request(
             self.USER_ENDPOINT + username + '/', 'GET')
 
+    def delete_user(self):
+        """
+        Removes an user from the community.
+        """
+        return self._make_request(
+            self.USER_ENDPOINT + username + '/', 'DELETE')
+
+    def add_user(self):
+        """
+        Adds an user to the community.
+        """
+        return self._make_request(
+            self.USER_ENDPOINT + username + '/', 'POST')
+
     def get_blogs(self, page=1):
         """
         Retrieves the list of blog posts in the community

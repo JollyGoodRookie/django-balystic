@@ -43,6 +43,7 @@ And use the client to perform the requests::
 
     user_list = client.get_users()
     user_detail = client.get_user_detail()
+    client.delete_user()
 
 
 A couple of views have been defined to display information
