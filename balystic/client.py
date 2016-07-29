@@ -57,7 +57,7 @@ class Client(object):
         return self._make_request(
             self.USER_ENDPOINT + username + '/', 'GET')
 
-    def delete_user(self):
+    def delete_user(self, username):
         """
         Removes an user from the community.
         """

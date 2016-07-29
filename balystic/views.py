@@ -16,6 +16,18 @@ class CommunityUserList(View):
         return render(request, self.template_name, context)
 
 
+class CommunityUserDetail(View):
+    """
+    Displays the details for the given user
+    """
+    templat_name = 'balystic/user_detail.html'
+    client=Client()
+
+    def get(self, request, username):
+        context = {'user': self.client.get_user(username)}
+        return render(request, self.template_name, context)
+
+
 class CommunityBlogListView(View):
     template_name = "balystic/blog_list.html"
 
