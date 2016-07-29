@@ -1,8 +1,10 @@
 import requests
 from django.conf import settings
 
+
 def _url(path):
     return ''
+
 
 class Client(object):
     """
@@ -10,6 +12,7 @@ class Client(object):
     by the balystic API.
     """
     USER_ENDPOINT = 'users/'
+    BLOG_ENDPOINT = 'blog/'
 
     def __init__(self):
         """
@@ -17,7 +20,7 @@ class Client(object):
         Root must be the full path to the api root
         i.e. http://sample.7dhub.com/api/
         """
-        self.headers = {'Authorization': 'TOKEN '+settings.BALYSTIC_API_TOKEN}
+        self.headers = {'Authorization': 'TOKEN ' + settings.BALYSTIC_API_TOKEN}
         self.root = settings.BALYSTIC_API_PATH
 
     def _make_request(self, path, method):
@@ -53,3 +56,17 @@ class Client(object):
         """
         return self._make_request(
             self.USER_ENDPOINT + username + '/', 'GET')
+
+    def get_blogs(self, page=1):
+        """
+        Retrieves the list of blog posts in the community
+        """
+        return self._make_request(
+            self.BLOG_ENDPOINT + '?page=' + str(page), 'GET')
+
+    def get_blog_detail(self, slug):
+        """
+        Retrieves a blog post detail
+        """
+        return self._make_request(
+            self.BLOG_ENDPOINT + slug + '/', 'GET')
