@@ -34,7 +34,12 @@ class CommunityBlogListView(View):
     def get(self, request):
         page = request.GET.get('page', 1)
         client = Client()
-        blog_entries = client.get_blogs(page=page)['blogs']
+        blog_entries = client.get_blogs(page=page)
+        #############################
+        if 'blogs' not in blog_entries:
+            raise Http404
+        blog_entries = blog_entries['blogs']
+        #############################
         context = {'blog_entries': blog_entries}
         return render(request, self.template_name, context)
 
@@ -51,4 +56,35 @@ class CommunityBlogDetailView(View):
         blog_entry = blog_entry['blog']
         #########################
         context = {'entry': blog_entry}
+        return render(request, self.template_name, context)
+
+
+class CommunityQAListView(View):
+    template_name = "balystic/qa_list.html"
+
+    def get(self, request):
+        page = request.GET.get('page', 1)
+        client = Client()
+        questions = client.get_questions(page=page)
+        #############################
+        if 'questions' not in questions:
+            raise Http404
+        questions = questions['questions']
+        #############################
+        context = {'questions': questions}
+        return render(request, self.template_name, context)
+
+
+class CommunityQADetailView(View):
+    template_name = "balystic/qa_detail.html"
+
+    def get(self, request, pk):
+        client = Client()
+        question = client.get_question_detail(pk)
+        #########################
+        if 'question' not in question:
+            raise Http404
+        question = question['question']
+        #########################
+        context = {'question': question}
         return render(request, self.template_name, context)

@@ -14,4 +14,8 @@ urlpatterns = [
         views.CommunityBlogListView.as_view(), name='balystic_blog'),
     url(r'^blog/(?P<slug>[-\w.]+)/$',
         views.CommunityBlogDetailView.as_view(), name='balystic_blog_detail'),
+    url(r'^qa/$',
+        views.CommunityQAListView.as_view(), name='balystic_qa'),
+    url(r'^qa/(?P<pk>\d+)/$',
+        views.CommunityQADetailView.as_view(), name='balystic_qa_detail'),
 ]

@@ -45,6 +45,25 @@ And use the client to perform the requests::
     user_detail = client.get_user_detail()
     client.delete_user()
 
+
+A couple of views have been defined to display information
+from your community.
+
+blogs:
+
+::
+    blog/    | template name = blog_list.html
+    blog/<slug>/ | template name = blog_detail.html
+
+qa:
+
+::
+    qa/ | template_name = qa_list.html
+    qa/<pk>/ | template_name= qa_detail.html
+
+to modify the template, create a folder in your project template folder called
+** balystic ** with the same name of the used inside the balystic app.
+
 Running Tests
 --------------
 
