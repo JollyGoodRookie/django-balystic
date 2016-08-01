@@ -187,12 +187,11 @@ class LoginView(View):
                 password=form.cleaned_data['password']
             )
             if user is not None:
-                if user is not None:
-                    if user.is_active:
-                        login(request, user)
-                        return redirect(settings.LOGIN_REDIRECT_URL)
-                    else:
-                        form.add_error(None, 'Account is not active')
+                if user.is_active:
+                    login(request, user)
+                    return redirect(settings.LOGIN_REDIRECT_URL)
                 else:
-                    form.add_error(None, 'Not able to authenticate with the given credentials')
+                    form.add_error(None, 'Account is not active')
+            else:
+                form.add_error(None, 'Not able to authenticate with the given credentials')
         return render(request, self.template_name, {'form': form})
