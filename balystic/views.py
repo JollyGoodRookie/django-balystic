@@ -148,3 +148,19 @@ class CommunityQACreateQuestionView(LoginRequiredMixin, View):
             return redirect('balystic_qa')
         context = {'form': form}
         return render(request, self.template_name, context)
+
+
+class CommunityQAQuestionVoteView(LoginRequiredMixin, View):
+
+    def post(self, request, pk):
+        client = Client()
+        client.vote_answer(pk, data=request.POST)
+        return redirect('balystic_qa_detail', pk=pk)
+
+
+class CommunityQAAnswerVoteView(LoginRequiredMixin, View):
+
+    def post(self, request, pk):
+        client = Client()
+        client.vote_answer(pk, data=request.POST)
+        return redirect('balystic_qa')
