@@ -1,7 +1,9 @@
 from django.http import Http404
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View
 from .client import Client
+from .forms import QAQuestionForm
 
 
 class CommunityUserList(View):
@@ -21,7 +23,7 @@ class CommunityUserDetail(View):
     Displays the details for the given user
     """
     templat_name = 'balystic/user_detail.html'
-    client=Client()
+    client = Client()
 
     def get(self, request, username):
         context = {'user': self.client.get_user(username)}
@@ -32,6 +34,10 @@ class CommunityBlogListView(View):
     template_name = "balystic/blog_list.html"
 
     def get(self, request):
+        """
+        Display the list of all the blogs posts
+        in the community (by page)
+        """
         page = request.GET.get('page', 1)
         client = Client()
         blog_entries = client.get_blogs(page=page)
@@ -48,6 +54,10 @@ class CommunityBlogDetailView(View):
     template_name = "balystic/blog_detail.html"
 
     def get(self, request, slug):
+        """
+        Display detail of the required blog post,
+        if it does exists.
+        """
         client = Client()
         blog_entry = client.get_blog_detail(slug)
         #########################
@@ -63,6 +73,10 @@ class CommunityQAListView(View):
     template_name = "balystic/qa_list.html"
 
     def get(self, request):
+        """
+        Display list of all the questions
+        inside community
+        """
         page = request.GET.get('page', 1)
         client = Client()
         questions = client.get_questions(page=page)
@@ -79,6 +93,10 @@ class CommunityQADetailView(View):
     template_name = "balystic/qa_detail.html"
 
     def get(self, request, pk):
+        """
+        Display detail of the required question,
+        if it exists
+        """
         client = Client()
         question = client.get_question_detail(pk)
         #########################
@@ -87,4 +105,31 @@ class CommunityQADetailView(View):
         question = question['question']
         #########################
         context = {'question': question}
+        return render(request, self.template_name, context)
+
+
+class CommunityQACreateQuestionView(LoginRequiredMixin, View):
+    template_name = "balystic/qa_create_question.html"
+
+    def get(self, request):
+        """
+        Display the form for creating a question
+        """
+        form = QAQuestionForm()
+        context = {'form': form}
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        """
+        Creates the question in the qa community
+        """
+        form = QAQuestionForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            data['user_email'] = request.user.email
+            client = Client()
+            a = client.create_question(data)
+            print a
+            return redirect('balystic_qa')
+        context = {'form': form}
         return render(request, self.template_name, context)

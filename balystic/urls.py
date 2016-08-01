@@ -18,4 +18,7 @@ urlpatterns = [
         views.CommunityQAListView.as_view(), name='balystic_qa'),
     url(r'^qa/(?P<pk>\d+)/$',
         views.CommunityQADetailView.as_view(), name='balystic_qa_detail'),
+    url(r'^qa/create-question/$',
+        views.CommunityQACreateQuestionView.as_view(),
+        name='balystic_qa_create_question'),
 ]

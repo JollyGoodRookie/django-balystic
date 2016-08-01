@@ -99,6 +99,13 @@ class Client(object):
         return self._make_request(
             self.QA_ENDPOINT + '?page=' + str(page), 'GET')
 
+    def create_question(self, data):
+        """
+        creates a question
+        """
+        return self._make_request(
+            self.QA_ENDPOINT, 'POST', data=data)
+
     def get_question_detail(self, pk):
         """
         Retrieves a blog post detail
