@@ -4,6 +4,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View
 from .client import Client
 from .forms import QAQuestionForm, QAAnswerForm
+from django.conf import settings
+from django.contrib.auth import authenticate, login, logout
+from django.views.generic import View
+from .forms import LoginForm
 
 
 class CommunityUserList(View):
@@ -177,3 +181,41 @@ class CommunityQAAnswerVoteView(LoginRequiredMixin, View):
         client = Client()
         client.vote_answer(pk, data=request.POST)
         return redirect('balystic_qa')
+
+class LoginView(View):
+    """
+    View that handles the authentication form.
+    """
+    template_name = 'balystic/login.html'
+
+    def get(self, request):
+        form = LoginForm()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            user = authenticate(
+                email=form.cleaned_data['email'],
+                password=form.cleaned_data['password']
+            )
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    return redirect(settings.LOGIN_REDIRECT_URL)
+                else:
+                    form.add_error(None, 'Account is not active')
+            else:
+                form.add_error(None, 'Not able to authenticate with the given credentials')
+        return render(request, self.template_name, {'form': form})
+
+
+class LogoutView(View):
+    template_name='balystic/logout.html'
+
+    def get(self, request):
+        return render(request, self.template_name, {})
+
+    def post(self, request):
+        logout(request)
+        return redirect('balystic_login')
