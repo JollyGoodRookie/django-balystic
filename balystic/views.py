@@ -128,8 +128,7 @@ class CommunityQACreateQuestionView(LoginRequiredMixin, View):
             data = form.cleaned_data
             data['user_email'] = request.user.email
             client = Client()
-            a = client.create_question(data)
-            print a
+            client.create_question(data)
             return redirect('balystic_qa')
         context = {'form': form}
         return render(request, self.template_name, context)
