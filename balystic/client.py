@@ -122,10 +122,8 @@ class Client(object):
 
     def authenticate_user(self, email, password):
         """
-        Verifies the credentials of an user and returns
-        True or False depending on the outcome.
+        Verifies the credentials of an user on server
         """
         data = {'email': email, 'password': password}
-        response = self._make_request(
+        return self._make_request(
             self.AUTH_ENDPOINT, 'POST', data)
-        return 'username' in response.keys()
