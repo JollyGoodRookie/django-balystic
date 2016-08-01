@@ -123,6 +123,19 @@ class CommunityQADetailView(View):
         context = {'form': form}
         return render(request, self.template_name, context)
 
+    def delete(self, request, pk):
+        client = Client()
+        client.delete_question(pk, request.user.email)
+        return redirect('balystic_qa')
+
+
+class CommunityQAAnswerView(LoginRequiredMixin, View):
+
+    def delete(self, request, pk):
+        client = Client()
+        client.delete_answer(pk, request.user.email)
+        return redirect('balystic_qa')
+
 
 class CommunityQACreateQuestionView(LoginRequiredMixin, View):
     template_name = "balystic/qa_create_question.html"
