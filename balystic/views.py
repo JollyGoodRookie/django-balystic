@@ -195,4 +195,4 @@ class LoginView(View):
                         form.add_error(None, 'Account is not active')
                 else:
                     form.add_error(None, 'Not able to authenticate with the given credentials')
-        return render(request, self.template_name, {'form': form})class LoginView(View):
+        return render(request, self.template_name, {'form': form})
