@@ -118,7 +118,15 @@ class Client(object):
         Create a vote for an question
         """
         return self._make_request(
-            self.QA_ENDPOINT + 'vote/question/' + pk, 'POST', data=data)
+            self.QA_ENDPOINT + 'vote/question/' + pk + '/', 'POST', data=data)
+
+    def delete_question(self, pk, email):
+        """
+        Removes a question if the owner
+        is related to the provided email
+        """
+        return self._make_request(
+            self.QA_ENDPOINT + pk + '/', 'DELETE', data={'user_email': email})
 
     def create_answer(self, pk, data):
         """
@@ -132,7 +140,16 @@ class Client(object):
         Create a vote for an answer
         """
         return self._make_request(
-            self.QA_ENDPOINT + 'vote/answer/' + pk, 'POST', data=data)
+            self.QA_ENDPOINT + 'vote/answer/' + pk + '/', 'POST', data=data)
+
+    def delete_answer(self, pk, email):
+        """
+        Removes an answer if the owner is related
+        to the provided email
+        """
+        return self._make_request(
+            self.QA_ENDPOINT + 'answer/' + pk + '/',
+            'DELETE', data={'user_email': email})
 
     def authenticate_user(self, email, password):
         """
