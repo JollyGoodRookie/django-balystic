@@ -119,4 +119,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 BALYSTIC_API_TOKEN = 'mysecrettoken'
-BALYSTIC_API_PATH = 'mycommunity.7dhub.com/api/'
+BALYSTIC_API_PATH = 'http://mycommunity.7dhub.com/api/'

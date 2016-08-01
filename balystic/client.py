@@ -21,7 +21,7 @@ class Client(object):
         Root must be the full path to the api root
         i.e. http://sample.7dhub.com/api/
         """
-        self.headers = {'Authorization': 'TOKEN ' + settings.BALYSTIC_API_TOKEN}
+        self.headers = {'Authorization': 'TOKEN '+settings.BALYSTIC_API_TOKEN}
         self.root = settings.BALYSTIC_API_PATH
 
     def _make_request(self, path, method):
@@ -40,8 +40,12 @@ class Client(object):
         try:
             response = request_method(full_path, headers=self.headers)
             return response.json()
-        except:
-            pass
+        except requests.exceptions.MissingSchema:
+            return {'error': 'The supplied API endpoint is missing the schema'}
+        except requests.exceptions.ConnectionError:
+            return {'error': 'Cannot communicate with server'}
+        except requests.exceptions.Timeout:
+            return {'error': 'Server is not responding'}
 
     def get_users(self):
         """
@@ -65,7 +69,7 @@ class Client(object):
         return self._make_request(
             self.USER_ENDPOINT + username + '/', 'DELETE')
 
-    def add_user(self):
+    def add_user(self, username):
         """
         Adds an user to the community.
         """
