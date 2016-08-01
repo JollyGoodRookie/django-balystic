@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import widgets
 
 
 class QAQuestionForm(forms.Form):
@@ -12,3 +13,8 @@ class QAQuestionForm(forms.Form):
 
 class QAAnswerForm(forms.Form):
     answer_text = forms.CharField(label='answer', required=True)
+
+
+class LoginForm(forms.Form):
+    email = forms.EmailField()
+    password = forms.CharField(widget=widgets.PasswordInput)

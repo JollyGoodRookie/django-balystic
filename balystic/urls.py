@@ -21,4 +21,10 @@ urlpatterns = [
     url(r'^qa/create-question/$',
         views.CommunityQACreateQuestionView.as_view(),
         name='balystic_qa_create_question'),
+    url(r'^qa/vote-question/(?P<pk>\d+)/$',
+        views.CommunityQACreateQuestionView.as_view(),
+        name='balystic_qa_vote_question'),
+    url(r'^qa/vote-answer/(?P<pk>\d+)/$',
+        views.CommunityQAAnswerVoteView.as_view(),
+        name='balystic_qa_vote_answer'),
 ]

@@ -113,12 +113,26 @@ class Client(object):
         return self._make_request(
             self.QA_ENDPOINT + pk + '/', 'GET')
 
+    def vote_question(self, pk, data):
+        """
+        Create a vote for an question
+        """
+        return self._make_request(
+            self.QA_ENDPOINT + 'vote/question/' + pk, 'POST', data=data)
+
     def create_answer(self, pk, data):
         """
         Retrieves a blog post detail
         """
         return self._make_request(
             self.QA_ENDPOINT + pk + '/', 'POST', data=data)
+
+    def vote_answer(self, pk, data):
+        """
+        Create a vote for an answer
+        """
+        return self._make_request(
+            self.QA_ENDPOINT + 'vote/answer/' + pk, 'POST', data=data)
 
     def authenticate_user(self, email, password):
         """
