@@ -11,6 +11,7 @@ class Client(object):
     Encapsulates all the logic to consume the services provided
     by the balystic API.
     """
+    AUTH_ENDPOINT = 'authenticate/'
     USER_ENDPOINT = 'users/'
     BLOG_ENDPOINT = 'blog/'
     QA_ENDPOINT = 'qa/'
@@ -24,7 +25,7 @@ class Client(object):
         self.headers = {'Authorization': 'TOKEN '+settings.BALYSTIC_API_TOKEN}
         self.root = settings.BALYSTIC_API_PATH
 
-    def _make_request(self, path, method):
+    def _make_request(self, path, method, data=None):
         """
         Encapsulates error handling. Sets an standard way to handle
         requests across the client.
@@ -38,7 +39,7 @@ class Client(object):
             request_method = requests.delete
         full_path = self.root + path
         try:
-            response = request_method(full_path, headers=self.headers)
+            response = request_method(full_path, headers=self.headers, data=data)
             return response.json()
         except requests.exceptions.MissingSchema:
             return {'error': 'The supplied API endpoint is missing the schema'}
@@ -104,3 +105,13 @@ class Client(object):
         """
         return self._make_request(
             self.QA_ENDPOINT + pk + '/', 'GET')
+
+    def authenticate_user(self, email, password):
+        """
+        Verifies the credentials of an user and returns
+        True or False depending on the outcome.
+        """
+        data = {'email': email, 'password': password}
+        response = self._make_request(
+            self.AUTH_ENDPOINT, 'POST', data)
+        return 'username' in response.keys()
