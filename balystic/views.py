@@ -5,7 +5,7 @@ from django.views.generic import View
 from .client import Client
 from .forms import QAQuestionForm, QAAnswerForm
 from django.conf import settings
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.views.generic import View
 from .forms import LoginForm
 
@@ -173,7 +173,7 @@ class LoginView(View):
     """
     View that handles the authentication form.
     """
-    template_name = 'account/login.html'
+    template_name = 'balystic/login.html'
 
     def get(self, request):
         form = LoginForm()
@@ -195,3 +195,14 @@ class LoginView(View):
             else:
                 form.add_error(None, 'Not able to authenticate with the given credentials')
         return render(request, self.template_name, {'form': form})
+
+
+class LogoutView(View):
+    template_name='balystic/logout.html'
+
+    def get(self, request):
+        return render(request, self.template_name, {})
+
+    def post(self, request):
+        logout(request)
+        return redirect('balystic_login')
