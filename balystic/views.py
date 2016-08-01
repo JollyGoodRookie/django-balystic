@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View
 from .client import Client
-from .forms import QAQuestionForm
+from .forms import QAQuestionForm, QAAnswerForm
 
 
 class CommunityUserList(View):
@@ -98,13 +98,29 @@ class CommunityQADetailView(View):
         if it exists
         """
         client = Client()
+        form = QAAnswerForm()
         question = client.get_question_detail(pk)
         #########################
         if 'question' not in question:
             raise Http404
         question = question['question']
         #########################
-        context = {'question': question}
+        context = {'question': question, 'form': form}
+        return render(request, self.template_name, context)
+
+    def post(self, request, pk):
+        """
+        creates an answer for a question
+        """
+        form = QAAnswerForm(request.POST)
+        if form.is_valid():
+            client = Client()
+            data = form.cleaned_data
+            data['user_email'] = request.user.email
+            client = Client()
+            client.create_answer(pk, data)
+            return redirect('balystic_qa_detail', pk=pk)
+        context = {'form': form}
         return render(request, self.template_name, context)
 
 

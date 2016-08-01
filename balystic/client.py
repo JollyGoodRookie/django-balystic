@@ -113,6 +113,13 @@ class Client(object):
         return self._make_request(
             self.QA_ENDPOINT + pk + '/', 'GET')
 
+    def create_answer(self, pk, data):
+        """
+        Retrieves a blog post detail
+        """
+        return self._make_request(
+            self.QA_ENDPOINT + pk + '/', 'POST', data=data)
+
     def authenticate_user(self, email, password):
         """
         Verifies the credentials of an user and returns

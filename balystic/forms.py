@@ -8,3 +8,7 @@ class QAQuestionForm(forms.Form):
     tags = forms.CharField(
         label='tags', help_text='tags separated by comma',
         required=True)
+
+
+class QAAnswerForm(forms.Form):
+    answer_text = forms.CharField(label='answer', required=True)
