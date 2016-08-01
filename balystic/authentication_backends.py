@@ -23,8 +23,8 @@ class BalysticBackend(object):
         else:
             return None
 
-        def get_user(self, user_id):
-            try:
-                return self.user_model.objects.get(pk=user_id)
-            except self.user_model.DoesNotExist:
-                return None
+    def get_user(self, user_id):
+        try:
+            return self.user_model.objects.get(pk=user_id)
+        except self.user_model.DoesNotExist:
+            return None
