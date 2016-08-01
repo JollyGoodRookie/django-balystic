@@ -127,6 +127,15 @@ class CommunityQADetailView(View):
         context = {'form': form}
         return render(request, self.template_name, context)
 
+    def put(self, request, pk):
+        form = QAQuestionForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            data['user_email'] = request.user.email
+            client = Client()
+            client.edit_question(pk, data)
+        return redirect('balystic_qa_detail', pk=pk)
+
     def delete(self, request, pk):
         client = Client()
         client.delete_question(pk, request.user.email)
@@ -134,6 +143,15 @@ class CommunityQADetailView(View):
 
 
 class CommunityQAAnswerView(LoginRequiredMixin, View):
+
+    def put(self, request, pk):
+        form = QAAnswerForm(request.data)
+        if form.is_valid():
+            data = form.cleaned_data
+            data['user_email'] = request.user.email
+            client = Client()
+            client.edit_answer(pk, data)
+        return redirect('balystic_qa_detail', pk=pk)
 
     def delete(self, request, pk):
         client = Client()

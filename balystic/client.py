@@ -113,6 +113,13 @@ class Client(object):
         return self._make_request(
             self.QA_ENDPOINT + pk + '/', 'GET')
 
+    def edit_question(self, pk, data):
+        """
+        edits a question
+        """
+        return self._make_request(
+            self.QA_ENDPOINT + pk + '/', 'PUT', data=data)
+
     def vote_question(self, pk, data):
         """
         Create a vote for an question
@@ -130,10 +137,17 @@ class Client(object):
 
     def create_answer(self, pk, data):
         """
-        Retrieves a blog post detail
+        creates an answer for a question
         """
         return self._make_request(
             self.QA_ENDPOINT + pk + '/', 'POST', data=data)
+
+    def edit_answer(self, pk, data):
+        """
+        Retrieves a blog post detail
+        """
+        return self._make_request(
+            self.QA_ENDPOINT + 'answer/' + pk + '/', 'PUT', data=data)
 
     def vote_answer(self, pk, data):
         """
