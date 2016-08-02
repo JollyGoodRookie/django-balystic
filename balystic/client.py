@@ -41,7 +41,6 @@ class Client(object):
         full_path = self.root + path
         try:
             response = request_method(full_path, headers=self.headers, data=data)
-            print response
             return response.json()
         except requests.exceptions.MissingSchema:
             return {'error': 'The supplied API endpoint is missing the schema'}
