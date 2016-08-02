@@ -74,7 +74,7 @@ class CommunityUserUpdate(View):
     def dispatch(self, request, username, *args, **kwargs):
         if request.user.username != username:
             return HttpResponseForbidden()
-        return super(CommunityUserUpdate, self).dispatch(*args, **kwargs)
+        return super(CommunityUserUpdate, self).dispatch(request, username, *args, **kwargs)
 
     def get(self, request, username):
         data = self.client.get_user_detail(username)
