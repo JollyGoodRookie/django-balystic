@@ -1,4 +1,5 @@
-from django.http import Http404
+from django.http import Http404, HttpResponseForbidden
+from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View
@@ -7,7 +8,7 @@ from .forms import QAQuestionForm, QAAnswerForm
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic import View
-from .forms import LoginForm, SignupForm
+from .forms import LoginForm, SignupForm, UpdateUserForm
 
 
 class UserSignupView(View):
@@ -55,12 +56,38 @@ class CommunityUserDetail(View):
     """
     Displays the details for the given user
     """
-    templat_name = 'balystic/user_detail.html'
+    template_name = 'balystic/user_detail.html'
     client = Client()
 
     def get(self, request, username):
-        context = {'user': self.client.get_user(username)}
+        context = {'user': self.client.get_user_detail(username)['user']}
         return render(request, self.template_name, context)
+
+
+class CommunityUserUpdate(View):
+    """
+    View to update user profile
+    """
+    template_name = 'balystic/user_update.html'
+    client = Client()
+
+    def dispatch(self, request, username, *args, **kwargs):
+        if request.user.username != username:
+            return HttpResponseForbidden()
+        return super(CommunityUserUpdate, self).dispatch(*args, **kwargs)
+
+    def get(self, request, username):
+        data = self.client.get_user_detail(username)
+        form = UpdateUserForm(initial=data['user'])
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, username):
+        form = UpdateUserForm(request.POST)
+        if form.is_valid():
+            self.client.update_user(username, form.cleaned_data)
+            return redirect(reverse('balystic_user_detail',
+                kwargs={'username': username}))
+        return render(request, self.template_name, {'form': form})
 
 
 class CommunityBlogListView(View):

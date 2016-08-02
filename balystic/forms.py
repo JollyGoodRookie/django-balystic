@@ -35,3 +35,15 @@ class SignupForm(forms.Form):
         if password_1 != password_2 or password_1 == '':
             raise forms.ValidationError(
                 'Passwords do not match')
+
+
+class UpdateUserForm(forms.Form):
+    first_name = forms.CharField(required=True)
+    last_name = forms.CharField(required=False)
+    email = forms.EmailField(required=True)
+    phone_number = forms.CharField(required=True)
+    bio = forms.CharField(required=False)
+    facebook = forms.URLField(required=False)
+    linkedin = forms.URLField(required=False)
+    twitter = forms.URLField(required=False)
+    isPro = forms.BooleanField(required=False)
