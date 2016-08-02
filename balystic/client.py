@@ -12,6 +12,7 @@ class Client(object):
     by the balystic API.
     """
     AUTH_ENDPOINT = 'authenticate/'
+    SIGNUP_ENDPOINT = 'signup/'
     USER_ENDPOINT = 'users/'
     BLOG_ENDPOINT = 'blog/'
     QA_ENDPOINT = 'qa/'
@@ -25,7 +26,7 @@ class Client(object):
         self.headers = {'Authorization': 'TOKEN '+settings.BALYSTIC_API_TOKEN}
         self.root = settings.BALYSTIC_API_PATH
 
-    def _make_request(self, path, method, data=None):
+    def _make_request(self, path, method, data=None, params=None):
         """
         Encapsulates error handling. Sets an standard way to handle
         requests across the client.
@@ -39,7 +40,7 @@ class Client(object):
             request_method = requests.delete
         full_path = self.root + path
         try:
-            response = request_method(full_path, headers=self.headers, data=data)
+            response = request_method(full_path, headers=self.headers, data=data, params=params)
             return response.json()
         except requests.exceptions.MissingSchema:
             return {'error': 'The supplied API endpoint is missing the schema'}
@@ -48,12 +49,13 @@ class Client(object):
         except requests.exceptions.Timeout:
             return {'error': 'Server is not responding'}
 
-    def get_users(self):
+    def get_users(self, params=None):
         """
         Retrieves the list of users in the community.
         There are two kind of users, owners and regular users.
         """
-        return self._make_request(self.USER_ENDPOINT, 'GET')
+        return self._make_request(self.USER_ENDPOINT, 'GET', params=params)
+
 
     def get_user_detail(self, username):
         """
@@ -113,26 +115,57 @@ class Client(object):
         return self._make_request(
             self.QA_ENDPOINT + pk + '/', 'GET')
 
+    def edit_question(self, pk, data):
+        """
+        edits a question
+        """
+        return self._make_request(
+            self.QA_ENDPOINT + pk + '/', 'PUT', data=data)
+
     def vote_question(self, pk, data):
         """
         Create a vote for an question
         """
         return self._make_request(
-            self.QA_ENDPOINT + 'vote/question/' + pk, 'POST', data=data)
+            self.QA_ENDPOINT + 'vote/question/' + pk + '/', 'POST', data=data)
+
+    def delete_question(self, pk, email):
+        """
+        Removes a question if the owner
+        is related to the provided email
+        """
+        return self._make_request(
+            self.QA_ENDPOINT + pk + '/', 'DELETE', data={'user_email': email})
 
     def create_answer(self, pk, data):
+        """
+        creates an answer for a question
+        """
+        return self._make_request(
+            self.QA_ENDPOINT + pk + '/', 'POST', data=data)
+
+    def edit_answer(self, pk, data):
         """
         Retrieves a blog post detail
         """
         return self._make_request(
-            self.QA_ENDPOINT + pk + '/', 'POST', data=data)
+            self.QA_ENDPOINT + 'answer/' + pk + '/', 'PUT', data=data)
 
     def vote_answer(self, pk, data):
         """
         Create a vote for an answer
         """
         return self._make_request(
-            self.QA_ENDPOINT + 'vote/answer/' + pk, 'POST', data=data)
+            self.QA_ENDPOINT + 'vote/answer/' + pk + '/', 'POST', data=data)
+
+    def delete_answer(self, pk, email):
+        """
+        Removes an answer if the owner is related
+        to the provided email
+        """
+        return self._make_request(
+            self.QA_ENDPOINT + 'answer/' + pk + '/',
+            'DELETE', data={'user_email': email})
 
     def authenticate_user(self, email, password):
         """
@@ -141,3 +174,10 @@ class Client(object):
         data = {'email': email, 'password': password}
         return self._make_request(
             self.AUTH_ENDPOINT, 'POST', data)
+
+    def signup_user(self, **kwargs):
+        """
+        Wraps signup of users
+        """
+        return self._make_request(
+            self.SIGNUP_ENDPOINT, 'POST', kwargs)

@@ -7,7 +7,36 @@ from .forms import QAQuestionForm, QAAnswerForm
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic import View
-from .forms import LoginForm
+from .forms import LoginForm, SignupForm
+
+
+class UserSignupView(View):
+    """
+    Renders a form to signup users.
+    The form includes the necessary validations.
+    """
+    template_name = 'balystic/user_signup.html'
+    client = Client()
+
+    def get(self, request):
+        form = SignupForm()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data.copy()
+            data['password'] = data.pop('password_1')
+            temp = data.pop('password_2')
+            response = self.client.signup_user(**data)
+            if 'username' in response.keys():
+                return redirect(settings.LOGIN_REDIRECT_URL)
+            else:
+                if 'error' in response.keys():
+                    form.add_error(None, response['error'])
+                else:
+                    form.add_error(None, 'Unable to create account with the provided information')
+        return render(request, self.template_name, {'form': form})
 
 
 class CommunityUserList(View):
@@ -126,6 +155,37 @@ class CommunityQADetailView(View):
             return redirect('balystic_qa_detail', pk=pk)
         context = {'form': form}
         return render(request, self.template_name, context)
+
+    def put(self, request, pk):
+        form = QAQuestionForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            data['user_email'] = request.user.email
+            client = Client()
+            client.edit_question(pk, data)
+        return redirect('balystic_qa_detail', pk=pk)
+
+    def delete(self, request, pk):
+        client = Client()
+        client.delete_question(pk, request.user.email)
+        return redirect('balystic_qa')
+
+
+class CommunityQAAnswerView(LoginRequiredMixin, View):
+
+    def put(self, request, pk):
+        form = QAAnswerForm(request.data)
+        if form.is_valid():
+            data = form.cleaned_data
+            data['user_email'] = request.user.email
+            client = Client()
+            client.edit_answer(pk, data)
+        return redirect('balystic_qa_detail', pk=pk)
+
+    def delete(self, request, pk):
+        client = Client()
+        client.delete_answer(pk, request.user.email)
+        return redirect('balystic_qa')
 
 
 class CommunityQACreateQuestionView(LoginRequiredMixin, View):
