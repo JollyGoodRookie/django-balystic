@@ -25,7 +25,7 @@ class Client(object):
         self.headers = {'Authorization': 'TOKEN '+settings.BALYSTIC_API_TOKEN}
         self.root = settings.BALYSTIC_API_PATH
 
-    def _make_request(self, path, method, data=None):
+    def _make_request(self, path, method, data=None, params=None):
         """
         Encapsulates error handling. Sets an standard way to handle
         requests across the client.
@@ -39,7 +39,7 @@ class Client(object):
             request_method = requests.delete
         full_path = self.root + path
         try:
-            response = request_method(full_path, headers=self.headers, data=data)
+            response = request_method(full_path, headers=self.headers, data=data, params=params)
             return response.json()
         except requests.exceptions.MissingSchema:
             return {'error': 'The supplied API endpoint is missing the schema'}
@@ -48,12 +48,13 @@ class Client(object):
         except requests.exceptions.Timeout:
             return {'error': 'Server is not responding'}
 
-    def get_users(self):
+    def get_users(self, params=None):
         """
         Retrieves the list of users in the community.
         There are two kind of users, owners and regular users.
         """
-        return self._make_request(self.USER_ENDPOINT, 'GET')
+        return self._make_request(self.USER_ENDPOINT, 'GET', params=params)
+
 
     def get_user_detail(self, username):
         """
