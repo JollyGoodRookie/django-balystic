@@ -19,5 +19,5 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'', include('balystic.urls', namespace='balystic')),
+    url(r'', include('balystic.urls')),
 ]
