@@ -38,6 +38,8 @@ class Client(object):
             request_method = requests.post
         elif method == 'DELETE':
             request_method = requests.delete
+        elif method == 'PUT':
+            request_method = requests.put
         full_path = self.root + path
         try:
             response = request_method(full_path, headers=self.headers, data=data, params=params)
@@ -78,6 +80,13 @@ class Client(object):
         """
         return self._make_request(
             self.USER_ENDPOINT + username + '/', 'POST')
+
+    def update_user(self, username, data):
+        """
+        Update user details
+        """
+        return self._make_request(
+            self.USER_ENDPOINT + username + '/', 'PUT', data=data)
 
     def get_blogs(self, page=1):
         """
