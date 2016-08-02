@@ -7,7 +7,36 @@ from .forms import QAQuestionForm, QAAnswerForm
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic import View
-from .forms import LoginForm
+from .forms import LoginForm, SignupForm
+
+
+class UserSignupView(View):
+    """
+    Renders a form to signup users.
+    The form includes the necessary validations.
+    """
+    template_name = 'balystic/user_signup.html'
+    client = Client()
+
+    def get(self, request):
+        form = SignupForm()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data.copy()
+            data['password'] = data.pop('password_1')
+            temp = data.pop('password_2')
+            response = self.client.signup_user(**data)
+            if 'username' in response.keys():
+                return redirect(settings.LOGIN_REDIRECT_URL)
+            else:
+                if 'error' in response.keys():
+                    form.add_error(None, response['error'])
+                else:
+                    form.add_error(None, 'Unable to create account with the provided information')
+        return render(request, self.template_name, {'form': form})
 
 
 class CommunityUserList(View):

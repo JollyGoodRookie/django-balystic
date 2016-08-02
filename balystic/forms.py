@@ -18,3 +18,19 @@ class QAAnswerForm(forms.Form):
 class LoginForm(forms.Form):
     email = forms.EmailField()
     password = forms.CharField(widget=widgets.PasswordInput)
+
+
+class SignupForm(forms.Form):
+    first_name = forms.CharField(required=True)
+    phone_number = forms.CharField(required=True)
+    email = forms.EmailField(required=True)
+    password_1 = forms.CharField(widget=widgets.PasswordInput)
+    password_2 = forms.CharField(widget=widgets.PasswordInput)
+
+    def clean(self):
+        cleaned_data = super(SignupForm, self).clean()
+        password_1 = cleaned_data.get('password_1', '')
+        password_2 = cleaned_data.get('password_2', '')
+        if password_1 != password_2 or password_1 == '':
+            raise forms.ValidationError(
+                'Passwords do not match')
