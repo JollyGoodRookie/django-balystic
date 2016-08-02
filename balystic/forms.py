@@ -24,6 +24,7 @@ class SignupForm(forms.Form):
     first_name = forms.CharField(required=True)
     phone_number = forms.CharField(required=True)
     email = forms.EmailField(required=True)
+    is_pro = forms.BooleanField(required=False)
     password_1 = forms.CharField(widget=widgets.PasswordInput)
     password_2 = forms.CharField(widget=widgets.PasswordInput)
 

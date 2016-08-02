@@ -174,13 +174,9 @@ class Client(object):
         return self._make_request(
             self.AUTH_ENDPOINT, 'POST', data)
 
-    def signup_user(self, first_name, phone_number, email, password):
+    def signup_user(self, **kwargs):
         """
         Wraps signup of users
         """
-        data = {'first_name': first_name,
-                'phone_number': phone_number,
-                'email': email,
-                'password': password}
         return self._make_request(
-            self.SIGNUP_ENDPOINT, 'POST', data)
+            self.SIGNUP_ENDPOINT, 'POST', kwargs)
