@@ -115,6 +115,8 @@ class CommunityBlogListView(View):
             raise Http404
         blog_entries = blog_entries['blogs']
         #############################
+        for entry in blog_entries:
+            entry['tags'] = [tag for tag in entry['tags'].split(',') if tag]
         context = {'blog_entries': blog_entries}
         return render(request, self.template_name, context)
 
