@@ -1,7 +1,9 @@
 from django.http import Http404, HttpResponseForbidden
+from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 from django.views.generic import View
 from .client import Client
 from .forms import QAQuestionForm, QAAnswerForm
@@ -31,6 +33,13 @@ class UserSignupView(View):
             temp = data.pop('password_2')
             response = self.client.signup_user(**data)
             if 'username' in response.keys():
+                user = authenticate(email=response['email'],
+                                    password=data['password'])
+                if user is not None:
+                    login(request, user)
+                    messages.success(request, 'Your account has been created.')
+                else:
+                    messages.success(request, 'Account created, please login')
                 return redirect(settings.LOGIN_REDIRECT_URL)
             else:
                 if 'error' in response.keys():

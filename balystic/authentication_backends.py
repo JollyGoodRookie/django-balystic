@@ -15,7 +15,7 @@ class BalysticBackend(object):
         response = client.authenticate_user(email=email, password=password)
         if 'username' in response.keys():
             try:
-                user = self.user_model.objects.get(email=email)
+                user = self.user_model.objects.get(username=response['username'])
             except self.user_model.DoesNotExist:
                 user = self.user_model(email=email, username=response['username'])
                 user.save()
