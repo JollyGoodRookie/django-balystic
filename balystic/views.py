@@ -113,11 +113,18 @@ class CommunityBlogListView(View):
         #############################
         if 'blogs' not in blog_entries:
             raise Http404
+        next_page = blog_entries.get('next_page', None)
         blog_entries = blog_entries['blogs']
+        try:
+            previous_page = int(page) - 1
+        except ValueError:
+            previous_page = 0
         #############################
         for entry in blog_entries:
             entry['tags'] = [tag for tag in entry['tags'].split(',') if tag]
-        context = {'blog_entries': blog_entries}
+        context = {'blog_entries': blog_entries,
+                   'next_page': next_page,
+                   'previous_page': previous_page}
         return render(request, self.template_name, context)
 
 
