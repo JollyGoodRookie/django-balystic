@@ -38,6 +38,8 @@ class UserSignupView(View):
                 if user is not None:
                     login(request, user)
                     messages.success(request, 'Your account has been created.')
+                    url = 'http://' + user.url + '&next='  + request.build_absolute_uri('/users/~redirect/')
+                    return redirect(url)
                 else:
                     messages.success(request, 'Account created, please login')
                 return redirect(settings.LOGIN_REDIRECT_URL)
@@ -297,7 +299,7 @@ class LoginView(View):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    url = 'http://' + user.url + '&next='  + request.build_absolute_uri('/')
+                    url = 'http://' + user.url + '&next='  + request.build_absolute_uri('/users/~redirect/')
                     return redirect(url)
                 else:
                     form.add_error(None, 'Account is not active')
