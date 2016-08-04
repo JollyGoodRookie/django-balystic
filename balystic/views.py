@@ -294,7 +294,8 @@ class LoginView(View):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return redirect('http://' + user.url + '&next='  + settings.LOGIN_REDIRECT_URL)
+                    url = 'http://' + user.url + '&next='  + request.build_absolute_uri('/')
+                    return redirect(url)
                 else:
                     form.add_error(None, 'Account is not active')
             else:
