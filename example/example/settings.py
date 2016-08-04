@@ -55,6 +55,10 @@ MIDDLEWARE_CLASSES = [
 
 ROOT_URLCONF = 'example.urls'
 
+AUTHENTICATION_BACKENDS = (
+    'balystic.authentication_backends.BalysticBackend',
+)
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

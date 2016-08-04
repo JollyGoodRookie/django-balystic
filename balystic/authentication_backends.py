@@ -13,12 +13,13 @@ class BalysticBackend(object):
     def authenticate(self, email, password):
         client = Client()
         response = client.authenticate_user(email=email, password=password)
-        if 'username' in response.keys():
+        if 'user' in response.keys():
             try:
-                user = self.user_model.objects.get(username=response['username'])
+                user = self.user_model.objects.get(username=response['user']['username'])
             except self.user_model.DoesNotExist:
-                user = self.user_model(email=email, username=response['username'])
+                user = self.user_model(email=email, username=response['user']['username'])
                 user.save()
+            user.url = response['url']
             return user
         else:
             return None
