@@ -16,6 +16,8 @@ class BalysticBackend(object):
         if 'user' in response.keys():
             try:
                 user = self.user_model.objects.get(username=response['user']['username'])
+                user.generics = response['user']
+                user.save()
             except self.user_model.DoesNotExist:
                 user = self.user_model(email=email, username=response['user']['username'])
                 user.save()
